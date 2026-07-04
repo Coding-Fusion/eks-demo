@@ -1,0 +1,41 @@
+# ============================================================
+# buildspec-deploy.yml — REUSABLE deploy stage (cluster-per-env)
+# The pipeline injects BOTH of these per stage:
+#   Deploy-Dev:  ENV=dev  EKS_CLUSTER=dev-cluster
+#   Deploy-QA:   ENV=qa   EKS_CLUSTER=qa-cluster
+# Same file, same buildspec — different target cluster.
+# ============================================================
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: us-east-1
+    ECR_REPO: inventory-demo
+    ENV: dev                    # defaults; pipeline overrides per stage
+    EKS_CLUSTER: dev-cluster
+
+phases:
+  pre_build:
+    commands:
+      - ECR_URI=$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - IMAGE_TAG=$(cat image-tag.txt)
+      - echo "Deploying image tag $IMAGE_TAG to cluster $EKS_CLUSTER (env $ENV)"
+      # THE cluster switch — kubeconfig now points at this env's cluster
+      - aws eks update-kubeconfig --name $EKS_CLUSTER --region $AWS_REGION
+
+  build:
+    commands:
+      # Namespace is now for APP separation (Walmart-style), same in every cluster
+      - |
+        helm upgrade --install inventory-demo ./helm/inventory-demo \
+          -f ./helm/inventory-demo/values.yaml \
+          -f ./helm/inventory-demo/values-$ENV.yaml \
+          --set image.repository=$ECR_URI/$ECR_REPO \
+          --set image.tag=$IMAGE_TAG \
+          --namespace inventory --create-namespace \
+          --wait --timeout 5m
+
+  post_build:
+    commands:
+      - kubectl rollout status deployment/inventory-demo -n inventory
+      - kubectl get pods -n inventory

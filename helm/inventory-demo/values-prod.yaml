@@ -1,0 +1,10 @@
+# PROD overlay — only what differs from base values.yaml
+replicaCount: 2          # HA in prod
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi

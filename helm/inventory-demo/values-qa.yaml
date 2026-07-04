@@ -1,0 +1,11 @@
+# QA overlay — only what DIFFERS from base values.yaml
+# (the "child KITT" of the deploy world)
+replicaCount: 1          # save money in QA
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 250m
+    memory: 512Mi

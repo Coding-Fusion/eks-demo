@@ -1,0 +1,23 @@
+# Overridden by --set flags in buildspec.yml at deploy time
+image:
+  repository: ""        # e.g. 123456789.dkr.ecr.us-east-1.amazonaws.com/inventory-demo
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+
+service:
+  type: LoadBalancer    # AWS provisions an ELB automatically; use ClusterIP + Ingress in real setups
+  port: 80
+  targetPort: 8080
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 1Gi
+
+probes:
+  path: /actuator/health

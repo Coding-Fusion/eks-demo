@@ -1,0 +1,10 @@
+# DEV overlay — only what differs from base values.yaml
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 250m
+    memory: 512Mi

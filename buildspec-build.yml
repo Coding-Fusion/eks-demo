@@ -1,0 +1,40 @@
+# ============================================================
+# buildspec-build.yml — BUILD stage only
+# Builds the image, pushes to ECR, and EXPORTS the image tag
+# as an artifact file so deploy stages know what to deploy.
+# ============================================================
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: us-east-1
+    ECR_REPO: inventory-demo
+
+phases:
+  pre_build:
+    commands:
+      - ECR_URI=$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URI
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - echo "Building image tag $IMAGE_TAG"
+
+  build:
+    commands:
+      - docker build -t $ECR_REPO:$IMAGE_TAG .
+      - docker tag $ECR_REPO:$IMAGE_TAG $ECR_URI/$ECR_REPO:$IMAGE_TAG
+
+  post_build:
+    commands:
+      - docker push $ECR_URI/$ECR_REPO:$IMAGE_TAG
+      # Hand-off file: deploy stages read the tag from here.
+      # This is how data crosses stage boundaries in CodePipeline.
+      - echo $IMAGE_TAG > image-tag.txt
+
+# Everything listed here gets zipped into S3 as the stage's OUTPUT
+# artifact. The deploy stage receives it as its INPUT artifact —
+# including the helm chart, so deploy doesn't need to re-clone git.
+artifacts:
+  files:
+    - image-tag.txt
+    - helm/**/*
+    - buildspec-deploy.yml
