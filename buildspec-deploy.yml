@@ -15,6 +15,14 @@ env:
     EKS_CLUSTER: dev-cluster
 
 phases:
+  install:
+    commands:
+      # helm
+      - curl -sSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      # kubectl (used in post_build)
+      - curl -sLO "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - chmod +x kubectl && mv kubectl /usr/local/bin/
+      - helm version && kubectl version --client
   pre_build:
     commands:
       - ECR_URI=$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
