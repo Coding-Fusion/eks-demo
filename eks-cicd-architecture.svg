@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 760" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#e07b00"/>
+    </marker>
+  </defs>
+
+  <text x="590" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#1a1a2e">CI/CD Flow: git push → EKS (cluster-per-environment)</text>
+
+  <!-- Developer -->
+  <rect x="30" y="70" width="150" height="70" rx="10" fill="#eef2ff" stroke="#4a5fc1" stroke-width="2"/>
+  <text x="105" y="100" text-anchor="middle" font-size="15" font-weight="bold" fill="#2b3a8f">Developer</text>
+  <text x="105" y="122" text-anchor="middle" font-size="12" fill="#444">git push (main)</text>
+
+  <!-- GitHub -->
+  <rect x="240" y="70" width="180" height="70" rx="10" fill="#f6f8fa" stroke="#24292e" stroke-width="2"/>
+  <text x="330" y="98" text-anchor="middle" font-size="15" font-weight="bold" fill="#24292e">GitHub</text>
+  <text x="330" y="118" text-anchor="middle" font-size="11" fill="#444">Coding-Fusion/eks-demo</text>
+  <text x="330" y="133" text-anchor="middle" font-size="10" fill="#777">AWS Connector app installed</text>
+
+  <line x1="180" y1="105" x2="238" y2="105" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- webhook to pipeline -->
+  <line x1="420" y1="105" x2="500" y2="105" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="460" y="95" text-anchor="middle" font-size="11" fill="#555">webhook</text>
+
+  <!-- CodePipeline container -->
+  <rect x="505" y="60" width="645" height="330" rx="12" fill="#fff8ef" stroke="#e07b00" stroke-width="2.5"/>
+  <text x="828" y="86" text-anchor="middle" font-size="16" font-weight="bold" fill="#b35f00">AWS CodePipeline  (eks-demo-pipeline)</text>
+
+  <!-- Source stage -->
+  <rect x="530" y="105" width="115" height="60" rx="8" fill="#ffffff" stroke="#e07b00" stroke-width="1.5"/>
+  <text x="587" y="130" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">Source</text>
+  <text x="587" y="148" text-anchor="middle" font-size="10" fill="#666">CodeStar conn.</text>
+
+  <!-- Build stage -->
+  <rect x="675" y="105" width="130" height="60" rx="8" fill="#ffffff" stroke="#e07b00" stroke-width="1.5"/>
+  <text x="740" y="126" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">Build</text>
+  <text x="740" y="142" text-anchor="middle" font-size="10" fill="#666">CodeBuild (Privileged)</text>
+  <text x="740" y="156" text-anchor="middle" font-size="10" fill="#666">buildspec-build.yml</text>
+
+  <!-- Deploy-Dev stage -->
+  <rect x="835" y="105" width="130" height="60" rx="8" fill="#ffffff" stroke="#e07b00" stroke-width="1.5"/>
+  <text x="900" y="126" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">Deploy-Dev</text>
+  <text x="900" y="142" text-anchor="middle" font-size="10" fill="#666">buildspec-deploy.yml</text>
+  <text x="900" y="156" text-anchor="middle" font-size="10" fill="#666">ENV=dev · dev-cluster</text>
+
+  <!-- Approve stage -->
+  <rect x="995" y="105" width="60" height="60" rx="8" fill="#fff2cc" stroke="#d6a400" stroke-width="1.5"/>
+  <text x="1025" y="130" text-anchor="middle" font-size="18">✋</text>
+  <text x="1025" y="150" text-anchor="middle" font-size="9" fill="#7a5c00">Approve</text>
+
+  <!-- Deploy-QA stage -->
+  <rect x="1075" y="105" width="60" height="60" rx="8" fill="#ffffff" stroke="#e07b00" stroke-width="1.5"/>
+  <text x="1105" y="128" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">Deploy</text>
+  <text x="1105" y="142" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">QA</text>
+  <text x="1105" y="157" text-anchor="middle" font-size="9" fill="#666">ENV=qa</text>
+
+  <!-- stage arrows -->
+  <line x1="645" y1="135" x2="673" y2="135" stroke="#e07b00" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <line x1="805" y1="135" x2="833" y2="135" stroke="#e07b00" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <line x1="965" y1="135" x2="993" y2="135" stroke="#e07b00" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <line x1="1055" y1="135" x2="1073" y2="135" stroke="#e07b00" stroke-width="2" marker-end="url(#arrowOrange)"/>
+
+  <!-- S3 artifact store -->
+  <rect x="620" y="215" width="260" height="58" rx="8" fill="#f0fff4" stroke="#2f855a" stroke-width="1.5"/>
+  <text x="750" y="238" text-anchor="middle" font-size="12" font-weight="bold" fill="#22543d">S3 Artifact Store</text>
+  <text x="750" y="256" text-anchor="middle" font-size="10" fill="#444">BuildArtifact: image-tag.txt + helm/ + buildspec-deploy.yml</text>
+
+  <line x1="740" y1="165" x2="745" y2="213" stroke="#2f855a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <text x="700" y="195" text-anchor="middle" font-size="9" fill="#2f855a">output</text>
+  <line x1="860" y1="215" x2="895" y2="167" stroke="#2f855a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <text x="905" y="200" text-anchor="middle" font-size="9" fill="#2f855a">input</text>
+  <line x1="880" y1="244" x2="1100" y2="244" stroke="#2f855a" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="1100" y1="244" x2="1100" y2="167" stroke="#2f855a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+  <!-- ECR -->
+  <rect x="530" y="300" width="220" height="66" rx="8" fill="#fdf2f8" stroke="#b83280" stroke-width="2"/>
+  <text x="640" y="325" text-anchor="middle" font-size="13" font-weight="bold" fill="#97266d">Amazon ECR</text>
+  <text x="640" y="343" text-anchor="middle" font-size="10" fill="#444">inventory-demo : &lt;git-SHA&gt;</text>
+  <text x="640" y="357" text-anchor="middle" font-size="9" fill="#777">built ONCE — promoted to both envs</text>
+
+  <line x1="700" y1="165" x2="645" y2="298" stroke="#b83280" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="645" y="240" text-anchor="middle" font-size="10" fill="#b83280">docker push</text>
+
+  <!-- dev cluster -->
+  <rect x="70" y="450" width="470" height="230" rx="12" fill="#eefaf1" stroke="#2f855a" stroke-width="2.5"/>
+  <text x="305" y="478" text-anchor="middle" font-size="15" font-weight="bold" fill="#22543d">EKS dev-cluster</text>
+  <rect x="100" y="495" width="410" height="120" rx="8" fill="#ffffff" stroke="#2f855a" stroke-width="1.2" stroke-dasharray="5,4"/>
+  <text x="305" y="515" text-anchor="middle" font-size="11" fill="#2f855a">namespace: inventory</text>
+  <rect x="130" y="530" width="160" height="66" rx="6" fill="#f0fff4" stroke="#2f855a"/>
+  <text x="210" y="552" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">Deployment</text>
+  <text x="210" y="568" text-anchor="middle" font-size="10" fill="#555">1 pod (values-dev)</text>
+  <text x="210" y="584" text-anchor="middle" font-size="9" fill="#777">readiness /actuator/health</text>
+  <rect x="320" y="530" width="160" height="66" rx="6" fill="#f0fff4" stroke="#2f855a"/>
+  <text x="400" y="552" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">Service</text>
+  <text x="400" y="568" text-anchor="middle" font-size="10" fill="#555">type: LoadBalancer</text>
+  <text x="400" y="584" text-anchor="middle" font-size="9" fill="#777">AWS ELB → dev URL</text>
+  <text x="305" y="648" text-anchor="middle" font-size="10" fill="#555">aws-auth: deploy role (NO-path ARN) → system:masters</text>
+
+  <!-- qa cluster -->
+  <rect x="640" y="450" width="470" height="230" rx="12" fill="#eef4fb" stroke="#2b6cb0" stroke-width="2.5"/>
+  <text x="875" y="478" text-anchor="middle" font-size="15" font-weight="bold" fill="#2a4365">EKS qa-cluster</text>
+  <rect x="670" y="495" width="410" height="120" rx="8" fill="#ffffff" stroke="#2b6cb0" stroke-width="1.2" stroke-dasharray="5,4"/>
+  <text x="875" y="515" text-anchor="middle" font-size="11" fill="#2b6cb0">namespace: inventory</text>
+  <rect x="700" y="530" width="160" height="66" rx="6" fill="#ebf4ff" stroke="#2b6cb0"/>
+  <text x="780" y="552" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">Deployment</text>
+  <text x="780" y="568" text-anchor="middle" font-size="10" fill="#555">pods (values-qa)</text>
+  <text x="780" y="584" text-anchor="middle" font-size="9" fill="#777">RollingUpdate maxUnavail 0</text>
+  <rect x="890" y="530" width="160" height="66" rx="6" fill="#ebf4ff" stroke="#2b6cb0"/>
+  <text x="970" y="552" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">Service</text>
+  <text x="970" y="568" text-anchor="middle" font-size="10" fill="#555">type: LoadBalancer</text>
+  <text x="970" y="584" text-anchor="middle" font-size="9" fill="#777">AWS ELB → qa URL</text>
+  <text x="875" y="648" text-anchor="middle" font-size="10" fill="#555">aws-auth: deploy role (NO-path ARN) → system:masters</text>
+
+  <!-- helm arrows from deploy stages to clusters -->
+  <line x1="880" y1="165" x2="330" y2="448" stroke="#2f855a" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="560" y="345" text-anchor="middle" font-size="11" fill="#2f855a" transform="rotate(27 560 345)">helm upgrade (values + values-dev)</text>
+
+  <line x1="1105" y1="165" x2="905" y2="448" stroke="#2b6cb0" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="1045" y="330" text-anchor="middle" font-size="11" fill="#2b6cb0" transform="rotate(55 1045 330)">helm upgrade</text>
+
+  <!-- image pull arrows -->
+  <line x1="540" y1="366" x2="300" y2="448" stroke="#b83280" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <line x1="700" y1="366" x2="850" y2="448" stroke="#b83280" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <text x="590" y="425" text-anchor="middle" font-size="10" fill="#b83280">kubelet pulls image (node IAM role)</text>
+
+  <!-- footer -->
+  <text x="590" y="725" text-anchor="middle" font-size="12" fill="#555">Same git-SHA image in both clusters — build once, promote the artifact.  Namespace = app separation; cluster = environment separation.</text>
+</svg>
